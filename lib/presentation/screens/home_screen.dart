@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:double_v_partners/presentation/views/address_view.dart';
 import 'package:flutter/material.dart';
 
 class SlideInfo {
@@ -95,28 +96,54 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeColors = Theme.of(context).colorScheme;
+
     return Scaffold(
       body: Stack(
         children: [
-          PageView(
-            controller: pageViewController,
-            physics: const NeverScrollableScrollPhysics(),
-            onPageChanged: (index) => setState(() => currentPage = index),
-            children: slides
-                .map(
-                  (slideData) => _Slide(
-                    title: slideData.title,
-                    caption: slideData.caption,
-                    imageUrl: slideData.imageUrl,
-                  ),
-                )
-                .toList(),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.16,
+            decoration: BoxDecoration(color: themeColors.primary),
           ),
 
-          _LastPageControls(
-            nextPage: nextPage,
-            previousPage: previousPage,
-            currentPage: currentPage,
+          SafeArea(
+            child: Stack(
+              children: [
+                FadeIn(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 16,
+                    ),
+                    child: PageView(
+                      controller: pageViewController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      onPageChanged: (index) =>
+                          setState(() => currentPage = index),
+                      children: slides
+                          .map((slideData) => AddressView())
+                          .toList(),
+                    ),
+                  ),
+                ),
+
+                _LastPageControls(
+                  nextPage: nextPage,
+                  previousPage: previousPage,
+                  currentPage: currentPage,
+                ),
+              ],
+            ),
+          ),
+
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.02,
+              decoration: BoxDecoration(color: themeColors.primary),
+            ),
           ),
         ],
       ),
@@ -157,58 +184,19 @@ class _LastPageControls extends StatelessWidget {
                       ),
                     )
                   : const SizedBox(),
+
               FadeInLeft(
                 from: 14,
                 delay: const Duration(milliseconds: 100),
                 child: FloatingActionButton(
                   onPressed: () => nextPage(),
-                  child: const Icon(Icons.arrow_forward_ios_sharp),
+                  child: currentPage == slides.length - 1
+                      ? const Icon(Icons.check)
+                      : const Icon(Icons.arrow_forward_ios_sharp),
                 ),
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _Slide extends StatelessWidget {
-  const _Slide({
-    required this.title,
-    required this.caption,
-    required this.imageUrl,
-  });
-
-  final String title;
-  final String caption;
-  final String imageUrl;
-
-  @override
-  Widget build(BuildContext context) {
-    final titleStyle = Theme.of(context).textTheme.titleLarge;
-    final captionStyle = Theme.of(context).textTheme.bodySmall;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32.0),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Image(image: AssetImage(imageUrl)),
-            ),
-
-            const SizedBox(height: 24.0),
-
-            Text(title, style: titleStyle),
-
-            const SizedBox(height: 8.0),
-
-            Text(caption, style: captionStyle),
-          ],
         ),
       ),
     );

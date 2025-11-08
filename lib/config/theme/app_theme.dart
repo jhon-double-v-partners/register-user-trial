@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  ThemeData getTheme(BuildContext context) {
-    final brightness = MediaQuery.of(context).platformBrightness;
+  static final lightTheme = ThemeData(
+    brightness: Brightness.light,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.blue,
+      brightness: Brightness.light,
+    ),
+    scaffoldBackgroundColor: Colors.white,
+  );
 
-    return ThemeData(
-      colorSchemeSeed: const Color(0xFF2862F5),
-      brightness: brightness,
-    );
-  }
+  static final darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    colorScheme: ColorScheme.fromSeed(
+      primary: Color.fromARGB(255, 30, 64, 186),
+      seedColor: Colors.blueAccent,
+      brightness: Brightness.dark,
+    ),
+    scaffoldBackgroundColor: const Color(0xFF121212),
+  );
 }
