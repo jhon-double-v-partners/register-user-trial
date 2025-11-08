@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class DatePickerExample extends StatefulWidget {
   final Function(DateTime?)? onChanged;
+  final String? Function(String?)? validator;
 
-  const DatePickerExample({super.key, this.onChanged});
+  const DatePickerExample({super.key, this.onChanged, this.validator});
 
   @override
   State<DatePickerExample> createState() => _DatePickerExampleState();
@@ -59,6 +60,7 @@ class _DatePickerExampleState extends State<DatePickerExample> {
           onTap: _selectDate,
           readOnly: true,
           prefixIcon: Icon(Icons.calendar_today),
+          validator: widget.validator,
         ),
       ],
     );

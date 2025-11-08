@@ -1,32 +1,12 @@
-import 'package:animate_do/animate_do.dart';
-import 'package:double_v_partners/presentation/views/address_view.dart';
+import 'package:double_v_partners/presentation/views/views.dart';
 import 'package:flutter/material.dart';
 
 class SlideInfo {
   final String title;
-  final String caption;
-  final String imageUrl;
+  final Widget content;
 
-  const SlideInfo(this.title, this.caption, this.imageUrl);
+  const SlideInfo(this.title, this.content);
 }
-
-final slides = <SlideInfo>[
-  SlideInfo(
-    'Search for a food',
-    'Dolor ut qui fugiat deserunt esse proident.',
-    'assets/images/1.png',
-  ),
-  SlideInfo(
-    'Fast food',
-    'Est nisi nulla anim laboris aliquip adipisicing.',
-    'assets/images/2.png',
-  ),
-  SlideInfo(
-    'Search for a food',
-    'Aliquip mollit esse laborum consequat labore elit dolor mollit.',
-    'assets/images/3.png',
-  ),
-];
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -79,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
         isLastPage = false;
       });
 
-      if (!isLastPage && page >= slides.length - 1.5) {
+      if (!isLastPage && page >= 1.5) {
         setState(() {
           isLastPage = true;
         });
@@ -98,39 +78,57 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final themeColors = Theme.of(context).colorScheme;
 
+    final slides = <SlideInfo>[
+      SlideInfo(
+        'Nuevo usuario',
+        PersonalData(onNextPage: nextPage, currentPage: currentPage),
+      ),
+      SlideInfo('Dirección', AddressView()),
+      SlideInfo('Felicitaciones', DoneView()),
+    ];
+
     return Scaffold(
       body: Stack(
         children: [
           Container(
             height: MediaQuery.of(context).size.height * 0.16,
             decoration: BoxDecoration(color: themeColors.primary),
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    slides[currentPage].title,
+                    style: TextStyle(
+                      color: themeColors.secondary,
+                      fontSize: 24,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
 
           SafeArea(
             child: Stack(
               children: [
-                FadeIn(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 16,
-                    ),
-                    child: PageView(
-                      controller: pageViewController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      onPageChanged: (index) =>
-                          setState(() => currentPage = index),
-                      children: slides
-                          .map((slideData) => AddressView())
-                          .toList(),
-                    ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 16,
                   ),
-                ),
-
-                _LastPageControls(
-                  nextPage: nextPage,
-                  previousPage: previousPage,
-                  currentPage: currentPage,
+                  child: PageView(
+                    controller: pageViewController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    onPageChanged: (index) =>
+                        setState(() => currentPage = index),
+                    children: slides
+                        .map((slideData) => slideData.content)
+                        .toList(),
+                  ),
                 ),
               ],
             ),
@@ -146,58 +144,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _LastPageControls extends StatelessWidget {
-  final Function nextPage;
-  final Function previousPage;
-  final int currentPage;
-
-  const _LastPageControls({
-    required this.nextPage,
-    required this.previousPage,
-    required this.currentPage,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned.fill(
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 32),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              currentPage > 0
-                  ? FadeInRight(
-                      from: 14,
-                      delay: const Duration(milliseconds: 100),
-                      child: FloatingActionButton(
-                        onPressed: currentPage == 0
-                            ? null
-                            : () => previousPage(),
-                        child: const Icon(Icons.arrow_back_ios_sharp),
-                      ),
-                    )
-                  : const SizedBox(),
-
-              FadeInLeft(
-                from: 14,
-                delay: const Duration(milliseconds: 100),
-                child: FloatingActionButton(
-                  onPressed: () => nextPage(),
-                  child: currentPage == slides.length - 1
-                      ? const Icon(Icons.check)
-                      : const Icon(Icons.arrow_forward_ios_sharp),
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
