@@ -83,8 +83,15 @@ class _HomeScreenState extends State<HomeScreen> {
         'Nuevo usuario',
         PersonalData(onNextPage: nextPage, currentPage: currentPage),
       ),
-      SlideInfo('Dirección', AddressView()),
-      SlideInfo('Felicitaciones', DoneView()),
+      SlideInfo(
+        'Dirección',
+        AddressView(
+          onNextPage: nextPage,
+          onPreviousPage: previousPage,
+          currentPage: currentPage,
+        ),
+      ),
+      SlideInfo('', DoneView()),
     ];
 
     return Scaffold(
