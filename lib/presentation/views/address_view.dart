@@ -64,6 +64,7 @@ class _AddressViewState extends State<AddressView> {
                   ),
                 ],
               ),
+
               NavigationControls(
                 nextPage: _onNextPage,
                 previousPage: widget.onPreviousPage,
