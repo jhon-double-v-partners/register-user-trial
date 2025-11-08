@@ -62,13 +62,13 @@ class _AddressViewState extends State<AddressView> {
                       return null;
                     },
                   ),
-                ],
-              ),
 
-              NavigationControls(
-                nextPage: _onNextPage,
-                previousPage: widget.onPreviousPage,
-                currentPage: widget.currentPage,
+                  NavigationControls(
+                    nextPage: _onNextPage,
+                    previousPage: widget.onPreviousPage,
+                    currentPage: widget.currentPage,
+                  ),
+                ],
               ),
             ],
           ),

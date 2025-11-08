@@ -82,13 +82,13 @@ class _PersonalDataState extends State<PersonalData> {
                       return null;
                     },
                   ),
-                ],
-              ),
 
-              NavigationControls(
-                nextPage: _onNextPage,
-                previousPage: () {},
-                currentPage: widget.currentPage,
+                  NavigationControls(
+                    nextPage: _onNextPage,
+                    previousPage: () {},
+                    currentPage: widget.currentPage,
+                  ),
+                ],
               ),
             ],
           ),

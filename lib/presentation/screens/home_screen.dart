@@ -90,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
         'Nuevo usuario',
         PersonalData(onNextPage: nextPage, currentPage: currentPage),
       ),
+
       SlideInfo(
         'Dirección',
         AddressView(

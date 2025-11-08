@@ -13,7 +13,6 @@ class AppTheme {
   static final darkTheme = ThemeData(
     brightness: Brightness.dark,
     colorScheme: ColorScheme.fromSeed(
-      primary: Color.fromARGB(255, 30, 64, 186),
       seedColor: Colors.blueAccent,
       brightness: Brightness.dark,
     ),

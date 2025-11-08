@@ -20,7 +20,11 @@ class ContainerTop extends StatelessWidget {
           children: [
             Text(
               title,
-              style: TextStyle(color: themeColors.secondary, fontSize: 24),
+              style: TextStyle(
+                color: themeColors.primaryFixed,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
