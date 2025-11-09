@@ -1,13 +1,22 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:double_v_partners/presentation/providers/new_user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DoneView extends StatelessWidget {
+class DoneView extends ConsumerStatefulWidget {
   final VoidCallback? onFinish;
 
   const DoneView({super.key, this.onFinish});
 
   @override
+  ConsumerState<DoneView> createState() => _DoneViewState();
+}
+
+class _DoneViewState extends ConsumerState<DoneView> {
+  @override
   Widget build(BuildContext context) {
+    final userName = ref.watch(newUserProvider).name;
+
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
 
@@ -28,7 +37,7 @@ class DoneView extends StatelessWidget {
             const SizedBox(height: 24),
 
             Text(
-              '¡Registro completado!',
+              '¡$userName tu registro ha sido completado!',
               style: theme.textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: colors.primary,
@@ -39,7 +48,7 @@ class DoneView extends StatelessWidget {
             const SizedBox(height: 12),
 
             Text(
-              'Gracias por registrarte. Tu cuenta ha sido creada exitosamente.',
+              'gracias por registrarte. Tu cuenta ha sido creada exitosamente.',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: colors.onSurfaceVariant,
               ),
@@ -51,7 +60,7 @@ class DoneView extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: onFinish,
+                onPressed: widget.onFinish,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(

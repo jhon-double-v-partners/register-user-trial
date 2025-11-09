@@ -2,9 +2,12 @@ import 'package:animate_do/animate_do.dart';
 import 'package:double_v_partners/config/database/data.dart';
 import 'package:double_v_partners/core/ui/atoms/atoms.dart';
 import 'package:double_v_partners/core/ui/molecules/molecules.dart';
+import 'package:double_v_partners/domain/entities/entities.dart';
+import 'package:double_v_partners/presentation/providers/new_user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddressView extends StatefulWidget {
+class AddressView extends ConsumerStatefulWidget {
   final Function onNextPage;
   final Function onPreviousPage;
   final int currentPage;
@@ -17,10 +20,10 @@ class AddressView extends StatefulWidget {
   });
 
   @override
-  State<AddressView> createState() => _AddressViewState();
+  ConsumerState<AddressView> createState() => _AddressViewState();
 }
 
-class _AddressViewState extends State<AddressView> {
+class _AddressViewState extends ConsumerState<AddressView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final List<AddressItem> addresses = [AddressItem()];
@@ -38,9 +41,15 @@ class _AddressViewState extends State<AddressView> {
     });
   }
 
+  void _saveUser() {
+    ref.read(newUserProvider.notifier).updateUser(addresses: addresses);
+  }
+
   void _onNextPage() {
     final isValid = _formKey.currentState?.validate() ?? false;
     if (!isValid) return;
+
+    _saveUser();
 
     widget.onNextPage();
   }
@@ -169,12 +178,6 @@ class _AddressViewState extends State<AddressView> {
       ),
     );
   }
-}
-
-class AddressItem {
-  String? country;
-  String? city;
-  String? address;
 }
 
 class _DropDownCountryCity extends StatefulWidget {
