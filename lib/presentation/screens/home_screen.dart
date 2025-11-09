@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:double_v_partners/core/ui/atoms/atoms.dart';
 import 'package:double_v_partners/presentation/views/views.dart';
 import 'package:flutter/material.dart';
@@ -99,28 +100,29 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     return Scaffold(
-      body: Stack(
+      body: Column(
         children: [
           !isLastPage
               ? ContainerTop(title: slides[currentPage].title)
               : Container(),
-          Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 16,
-                ),
-                child: PageView(
-                  controller: pageViewController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  onPageChanged: (index) => setState(() => currentPage = index),
-                  children: slides
-                      .map((slideData) => slideData.content)
-                      .toList(),
-                ),
+
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: PageView(
+                controller: pageViewController,
+                physics: const NeverScrollableScrollPhysics(),
+                onPageChanged: (index) => setState(() => currentPage = index),
+                children: slides.map((slideData) {
+                  return Center(
+                    child: FractionallySizedBox(
+                      widthFactor: kIsWeb ? 0.4 : 1.0,
+                      child: slideData.content,
+                    ),
+                  );
+                }).toList(),
               ),
-            ],
+            ),
           ),
 
           ContainerBottom(),
