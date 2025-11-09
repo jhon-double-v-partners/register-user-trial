@@ -25,12 +25,39 @@ class AddressView extends ConsumerStatefulWidget {
 
 class _AddressViewState extends ConsumerState<AddressView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final List<TextEditingController> _addressControllers = [];
 
-  final List<AddressItem> addresses = [AddressItem()];
+  final List<AddressItem> addresses = [];
+
+  @override
+  void initState() {
+    final userData = ref.read(newUserProvider);
+
+    if (userData.addresses != null) {
+      addresses.addAll(userData.addresses ?? []);
+    } else {
+      addresses.add(AddressItem());
+    }
+
+    for (final address in addresses) {
+      _addressControllers.add(TextEditingController(text: address.address));
+    }
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    for (final controller in _addressControllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
 
   void _addNewAddress() {
     setState(() {
       addresses.add(AddressItem());
+      _addressControllers.add(TextEditingController());
     });
   }
 
@@ -38,6 +65,7 @@ class _AddressViewState extends ConsumerState<AddressView> {
     if (addresses.length == 1) return;
     setState(() {
       addresses.removeAt(index);
+      _addressControllers.removeAt(index).dispose();
     });
   }
 
@@ -52,6 +80,12 @@ class _AddressViewState extends ConsumerState<AddressView> {
     _saveUser();
 
     widget.onNextPage();
+  }
+
+  void _onPreviousPage() {
+    _saveUser();
+
+    widget.onPreviousPage();
   }
 
   @override
@@ -105,7 +139,10 @@ class _AddressViewState extends ConsumerState<AddressView> {
                                         onCityChanged: (city) {
                                           addresses[index].city = city;
                                         },
+                                        initialCountry: address.country,
+                                        initialCity: address.city,
                                       ),
+
                                       CustomTextFormField(
                                         labelText: 'Dirección',
                                         hint: 'Ej: Calle 10 #12-45',
@@ -121,6 +158,7 @@ class _AddressViewState extends ConsumerState<AddressView> {
                                           }
                                           return null;
                                         },
+                                        controller: _addressControllers[index],
                                       ),
 
                                       // Botón eliminar dirección (solo si hay más de una)
@@ -158,7 +196,7 @@ class _AddressViewState extends ConsumerState<AddressView> {
 
                           NavigationControls(
                             nextPage: _onNextPage,
-                            previousPage: widget.onPreviousPage,
+                            previousPage: _onPreviousPage,
                             currentPage: widget.currentPage,
                           ),
                         ],
@@ -178,11 +216,15 @@ class _AddressViewState extends ConsumerState<AddressView> {
 class _DropDownCountryCity extends StatefulWidget {
   final ValueChanged<String>? onCountryChanged;
   final ValueChanged<String>? onCityChanged;
+  final String? initialCountry;
+  final String? initialCity;
 
   const _DropDownCountryCity({
     super.key,
     this.onCountryChanged,
     this.onCityChanged,
+    this.initialCountry,
+    this.initialCity,
   });
 
   @override
@@ -192,6 +234,13 @@ class _DropDownCountryCity extends StatefulWidget {
 class _DropDownCountryCityState extends State<_DropDownCountryCity> {
   String? selectedCountry;
   String? selectedCity;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedCountry = widget.initialCountry;
+    selectedCity = widget.initialCity;
+  }
 
   @override
   Widget build(BuildContext context) {

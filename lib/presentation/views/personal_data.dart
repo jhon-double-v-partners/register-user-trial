@@ -43,9 +43,9 @@ class _PersonalDataState extends ConsumerState<PersonalData> {
 
   @override
   void dispose() {
-    _saveUser();
     _nameController.dispose();
     _lastNameController.dispose();
+    _dateOfBirthController.dispose();
     super.dispose();
   }
 
