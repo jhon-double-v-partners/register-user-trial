@@ -32,6 +32,7 @@ flutter test
 
 🧭 Estas pruebas garantizan que cada parte del sistema funcione correctamente, incluso ante cambios futuros.
 
+### Móvil
 <img width="270" height="600" alt="Screenshot_1762705203" src="https://github.com/user-attachments/assets/4eedad64-75bd-46ba-9c77-e9db9076052c" />
 <img width="270" height="600" alt="Screenshot_1762705214" src="https://github.com/user-attachments/assets/079dbdc4-0126-4947-8115-399d715ca0f7" />
 <img width="270" height="600" alt="Screenshot_1762705232" src="https://github.com/user-attachments/assets/f68775a9-59d8-49bd-970a-70f7716a281b" />
@@ -39,6 +40,16 @@ flutter test
 <img width="270" height="600" alt="Screenshot_1762705262" src="https://github.com/user-attachments/assets/8f6c859c-1eb2-461e-862f-f7d8973f314b" />
 <img width="270" height="600" alt="Screenshot_1762705266" src="https://github.com/user-attachments/assets/ca5079dd-41ea-46f7-91d3-4756e85ad58b" />
 <img width="270" height="600" alt="Screenshot_1762705276" src="https://github.com/user-attachments/assets/724ea565-a08c-46f1-a582-d19c956476cb" />
+
+
+### Web
+<img width="1365" height="734" alt="sc_web_1" src="https://github.com/user-attachments/assets/12acb0a9-1b84-4588-ba04-edab7787ee9e" />
+<img width="1365" height="734" alt="sc_web_1 1" src="https://github.com/user-attachments/assets/9d2a8297-6310-47b7-b9a6-d7bf8761f6f8" />
+<img width="1365" height="734" alt="sc_web_2" src="https://github.com/user-attachments/assets/19f5cd6b-c2f3-4284-9638-2ed31092bc39" />
+<img width="1365" height="734" alt="sc_web_3" src="https://github.com/user-attachments/assets/7d171dd0-dc76-4434-8b25-ea84a4329f29" />
+<img width="1360" height="741" alt="sc_web_4" src="https://github.com/user-attachments/assets/e9acad9e-04f5-4ff5-b846-8b06955d6d2e" />
+<img width="1360" height="741" alt="sc_web_5" src="https://github.com/user-attachments/assets/502a7a5a-2ee8-4209-9d1f-3d7b79a4089a" />
+
 
 ---
 
@@ -87,7 +98,6 @@ lib/
 ```
 
 ### 🧩 Uso del patrón Atomic Design
-
 Se empleó una estructura basada en átomos y moléculas para mantener la UI organizada y reutilizable:
 
 Átomos: componentes básicos como CustomTextFormField, CustomButton, etc.
