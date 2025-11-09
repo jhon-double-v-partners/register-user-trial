@@ -22,13 +22,24 @@ class AddressView extends StatefulWidget {
 
 class _AddressViewState extends State<AddressView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String country = '';
-  String department = '';
-  String city = '';
+
+  final List<AddressItem> addresses = [AddressItem()];
+
+  void _addAddress() {
+    setState(() {
+      addresses.add(AddressItem());
+    });
+  }
+
+  void _removeAddress(int index) {
+    if (addresses.length == 1) return;
+    setState(() {
+      addresses.removeAt(index);
+    });
+  }
 
   void _onNextPage() {
     final isValid = _formKey.currentState?.validate() ?? false;
-
     if (!isValid) return;
 
     widget.onNextPage();
@@ -36,50 +47,145 @@ class _AddressViewState extends State<AddressView> {
 
   @override
   Widget build(BuildContext context) {
+    final themeColors = Theme.of(context).colorScheme;
+
     return FadeIn(
       child: Form(
         key: _formKey,
-        child: SizedBox.expand(
-          child: Stack(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                spacing: 16,
-                children: [
-                  _DropDownCountryCity(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 24,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        spacing: 24,
+                        children: [
+                          // Lista dinámica de direcciones
+                          ...List.generate(addresses.length, (index) {
+                            return FadeInUp(
+                              from: 14,
+                              duration: const Duration(milliseconds: 300),
+                              child: Card(
+                                color: themeColors.surface,
+                                elevation: 2,
+                                margin: const EdgeInsets.only(bottom: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: Column(
+                                    spacing: 8,
+                                    children: [
+                                      _DropDownCountryCity(
+                                        key: ValueKey('address_$index'),
+                                        onCountryChanged: (country) {
+                                          addresses[index].country = country;
+                                        },
+                                        onCityChanged: (city) {
+                                          addresses[index].city = city;
+                                        },
+                                      ),
+                                      CustomTextFormField(
+                                        labelText: 'Dirección',
+                                        hint: 'Ej: Calle 10 #12-45',
+                                        prefixIcon: const Icon(
+                                          Icons.place_outlined,
+                                        ),
+                                        onChanged: (value) {
+                                          addresses[index].address = value;
+                                        },
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'La dirección es obligatoria';
+                                          }
+                                          return null;
+                                        },
+                                      ),
 
-                  CustomTextFormField(
-                    labelText: 'Dirección',
-                    hint: 'Ej: C/ San José, 5 #10-12',
-                    onChanged: (value) => country = value,
-                    prefixIcon: const Icon(Icons.place),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'La dirección es obligatoria';
-                      }
+                                      // Botón eliminar dirección (solo si hay más de una)
+                                      if (addresses.length > 1)
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: TextButton.icon(
+                                            onPressed: () =>
+                                                _removeAddress(index),
+                                            icon: const Icon(
+                                              Icons.delete_outline,
+                                            ),
+                                            label: const Text(
+                                              'Eliminar dirección',
+                                            ),
+                                            style: TextButton.styleFrom(
+                                              foregroundColor: Colors.redAccent,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
 
-                      return null;
-                    },
+                          // Botón agregar dirección
+                          OutlinedButton.icon(
+                            onPressed: _addAddress,
+                            icon: const Icon(Icons.add_location_alt_rounded),
+                            label: const Text('Agregar otra dirección'),
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 32),
+
+                          NavigationControls(
+                            nextPage: _onNextPage,
+                            previousPage: widget.onPreviousPage,
+                            currentPage: widget.currentPage,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-
-                  NavigationControls(
-                    nextPage: _onNextPage,
-                    previousPage: widget.onPreviousPage,
-                    currentPage: widget.currentPage,
-                  ),
-                ],
+                ),
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
   }
 }
 
+class AddressItem {
+  String? country;
+  String? city;
+  String? address;
+}
+
 class _DropDownCountryCity extends StatefulWidget {
-  const _DropDownCountryCity();
+  final ValueChanged<String>? onCountryChanged;
+  final ValueChanged<String>? onCityChanged;
+
+  const _DropDownCountryCity({
+    super.key,
+    this.onCountryChanged,
+    this.onCityChanged,
+  });
 
   @override
   State<_DropDownCountryCity> createState() => _DropDownCountryCityState();
@@ -95,7 +201,6 @@ class _DropDownCountryCityState extends State<_DropDownCountryCity> {
       spacing: 16,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Dropdown de Países
         DropdownButtonFormField<String>(
           initialValue: selectedCountry,
           decoration: InputDecoration(
@@ -111,8 +216,9 @@ class _DropDownCountryCityState extends State<_DropDownCountryCity> {
           onChanged: (value) {
             setState(() {
               selectedCountry = value;
-              selectedCity = null; // Reiniciar ciudad
+              selectedCity = null;
             });
+            widget.onCountryChanged?.call(value ?? '');
           },
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -121,7 +227,6 @@ class _DropDownCountryCityState extends State<_DropDownCountryCity> {
             return null;
           },
         ),
-
         DropdownButtonFormField<String>(
           initialValue: selectedCity,
           decoration: InputDecoration(
@@ -137,9 +242,8 @@ class _DropDownCountryCityState extends State<_DropDownCountryCity> {
                     )
                     .toList(),
           onChanged: (value) {
-            setState(() {
-              selectedCity = value;
-            });
+            setState(() => selectedCity = value);
+            widget.onCityChanged?.call(value ?? '');
           },
           validator: (value) {
             if (value == null || value.isEmpty) {
