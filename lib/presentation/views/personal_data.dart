@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:double_v_partners/core/ui/atoms/atoms.dart';
 import 'package:double_v_partners/core/ui/molecules/molecules.dart';
 import 'package:double_v_partners/presentation/providers/new_user_provider.dart';
+import 'package:double_v_partners/utils/format_date_human.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,14 +22,41 @@ class PersonalData extends ConsumerStatefulWidget {
 
 class _PersonalDataState extends ConsumerState<PersonalData> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String name = '';
-  String lastName = '';
-  DateTime? dateOfBirth;
+
+  late TextEditingController _nameController;
+  late TextEditingController _lastNameController;
+  late TextEditingController _dateOfBirthController;
+  late DateTime? dateOfBirth;
+
+  @override
+  void initState() {
+    super.initState();
+    final userData = ref.read(newUserProvider);
+
+    _nameController = TextEditingController(text: userData.name);
+    _lastNameController = TextEditingController(text: userData.lastName);
+    dateOfBirth = userData.dateOfBirth;
+    _dateOfBirthController = TextEditingController(
+      text: formatDateHuman(userData.dateOfBirth),
+    );
+  }
+
+  @override
+  void dispose() {
+    _saveUser();
+    _nameController.dispose();
+    _lastNameController.dispose();
+    super.dispose();
+  }
 
   void _saveUser() {
     ref
         .read(newUserProvider.notifier)
-        .updateUser(name: name, lastName: lastName, dateOfBirth: dateOfBirth);
+        .updateUser(
+          name: _nameController.text,
+          lastName: _lastNameController.text,
+          dateOfBirth: dateOfBirth,
+        );
   }
 
   void _onNextPage() {
@@ -43,11 +71,6 @@ class _PersonalDataState extends ConsumerState<PersonalData> {
 
   @override
   Widget build(BuildContext context) {
-    final userData = ref.watch(newUserProvider);
-    name = userData.name;
-    lastName = userData.lastName;
-    dateOfBirth = userData.dateOfBirth;
-
     return FadeIn(
       child: Form(
         key: _formKey,
@@ -62,7 +85,7 @@ class _PersonalDataState extends ConsumerState<PersonalData> {
                   CustomTextFormField(
                     labelText: 'Nombre',
                     hint: 'Nombre',
-                    onChanged: (value) => name = value,
+                    controller: _nameController,
                     prefixIcon: const Icon(Icons.person),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -77,7 +100,7 @@ class _PersonalDataState extends ConsumerState<PersonalData> {
                     labelText: 'Apellido',
                     hint: 'Apellido',
                     prefixIcon: Icon(Icons.abc),
-                    onChanged: (value) => lastName = value,
+                    controller: _lastNameController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'El apellido es obligatorio';
@@ -89,6 +112,7 @@ class _PersonalDataState extends ConsumerState<PersonalData> {
 
                   CustomDatePicker(
                     onChanged: (value) => dateOfBirth = value,
+                    controller: _dateOfBirthController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'El fecha es obligatoria';
@@ -96,6 +120,7 @@ class _PersonalDataState extends ConsumerState<PersonalData> {
 
                       return null;
                     },
+                    initialDate: dateOfBirth,
                   ),
 
                   NavigationControls(

@@ -6,12 +6,14 @@ class CustomDatePicker extends StatefulWidget {
   final Function(DateTime?)? onChanged;
   final String? Function(String?)? validator;
   final TextEditingController? controller;
+  final DateTime? initialDate;
 
   const CustomDatePicker({
     super.key,
     this.onChanged,
     this.validator,
     this.controller,
+    this.initialDate,
   });
 
   @override
@@ -19,12 +21,14 @@ class CustomDatePicker extends StatefulWidget {
 }
 
 class _CustomDatePickerState extends State<CustomDatePicker> {
-  DateTime? selectedDate;
+  late DateTime? selectedDate;
   late TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
+
+    selectedDate = widget.initialDate;
     _controller = widget.controller ?? TextEditingController();
   }
 
@@ -45,16 +49,17 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
       lastDate: DateTime(now.year + 1),
     );
 
-    if (pickedDate != null && pickedDate != selectedDate) {
+    if (pickedDate != null) {
       setState(() {
         selectedDate = pickedDate;
-
         _controller.text = formatDateHuman(pickedDate);
       });
 
       widget.onChanged?.call(pickedDate);
-    } else {
-      _controller.text = "Selecciona una fecha";
+    } else if (selectedDate == null) {
+      setState(() {
+        _controller.text = "Selecciona una fecha";
+      });
     }
   }
 

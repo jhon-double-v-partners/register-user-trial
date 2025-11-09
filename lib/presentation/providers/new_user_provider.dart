@@ -66,4 +66,9 @@ class NewUser {
       addresses: addresses ?? this.addresses,
     );
   }
+
+  @override
+  String toString() {
+    return 'NewUser(name: $name, lastName: $lastName, dateOfBirth: $dateOfBirth, country: $country, city: $city, addresses: $addresses)';
+  }
 }
