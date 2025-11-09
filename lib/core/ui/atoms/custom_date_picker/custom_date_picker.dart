@@ -2,17 +2,17 @@ import 'package:double_v_partners/core/ui/atoms/custom_text_form_field/custom_te
 import 'package:double_v_partners/utils/format_date_human.dart';
 import 'package:flutter/material.dart';
 
-class DatePickerExample extends StatefulWidget {
+class CustomDatePicker extends StatefulWidget {
   final Function(DateTime?)? onChanged;
   final String? Function(String?)? validator;
 
-  const DatePickerExample({super.key, this.onChanged, this.validator});
+  const CustomDatePicker({super.key, this.onChanged, this.validator});
 
   @override
-  State<DatePickerExample> createState() => _DatePickerExampleState();
+  State<CustomDatePicker> createState() => _CustomDatePickerState();
 }
 
-class _DatePickerExampleState extends State<DatePickerExample> {
+class _CustomDatePickerState extends State<CustomDatePicker> {
   DateTime? selectedDate;
   late TextEditingController _controller;
 
@@ -45,6 +45,8 @@ class _DatePickerExampleState extends State<DatePickerExample> {
       });
 
       widget.onChanged?.call(pickedDate);
+    } else {
+      _controller.text = "Selecciona una fecha";
     }
   }
 

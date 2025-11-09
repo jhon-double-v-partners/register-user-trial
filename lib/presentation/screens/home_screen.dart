@@ -69,11 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void onFinish() {
-    pageViewController.animateToPage(
-      0,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeIn,
-    );
+    pageViewController.jumpToPage(0);
   }
 
   @override

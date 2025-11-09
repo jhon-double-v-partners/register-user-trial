@@ -20,10 +20,12 @@ class CustomButton extends StatelessWidget {
       onPressed: onPressed,
       icon: icon,
       iconAlignment: iconAlignment,
-      label: Text(text),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      label: Text(
+        text,
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          // color: colorScheme.onPrimaryContainer,
+        ),
       ),
     );
   }

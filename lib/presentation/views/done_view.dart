@@ -53,7 +53,7 @@ class _DoneViewState extends ConsumerState<DoneView> {
             const SizedBox(height: 12),
 
             Text(
-              'gracias por registrarte. Tu cuenta ha sido creada exitosamente.',
+              'Gracias por registrarte. Tu cuenta ha sido creada exitosamente.',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: colors.onSurfaceVariant,
               ),

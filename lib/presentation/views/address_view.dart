@@ -70,13 +70,13 @@ class _AddressViewState extends ConsumerState<AddressView> {
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 24,
+                        horizontal: 8,
+                        vertical: 16,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        spacing: 24,
+                        spacing: 16,
                         children: [
                           // Lista dinámica de direcciones
                           ...List.generate(addresses.length, (index) {
@@ -148,17 +148,10 @@ class _AddressViewState extends ConsumerState<AddressView> {
                             );
                           }),
 
-                          // Botón agregar dirección
-                          OutlinedButton.icon(
+                          CustomButton(
+                            text: 'Agregar otra dirección',
                             onPressed: _addNewAddress,
                             icon: const Icon(Icons.add_location_alt_rounded),
-                            label: const Text('Agregar otra dirección'),
-                            style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
-                              ),
-                            ),
                           ),
 
                           const SizedBox(height: 32),

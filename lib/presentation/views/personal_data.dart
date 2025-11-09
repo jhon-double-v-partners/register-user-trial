@@ -87,7 +87,7 @@ class _PersonalDataState extends ConsumerState<PersonalData> {
                     },
                   ),
 
-                  DatePickerExample(
+                  CustomDatePicker(
                     onChanged: (value) => dateOfBirth = value,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
