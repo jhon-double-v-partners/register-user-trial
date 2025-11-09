@@ -5,8 +5,14 @@ import 'package:flutter/material.dart';
 class CustomDatePicker extends StatefulWidget {
   final Function(DateTime?)? onChanged;
   final String? Function(String?)? validator;
+  final TextEditingController? controller;
 
-  const CustomDatePicker({super.key, this.onChanged, this.validator});
+  const CustomDatePicker({
+    super.key,
+    this.onChanged,
+    this.validator,
+    this.controller,
+  });
 
   @override
   State<CustomDatePicker> createState() => _CustomDatePickerState();
@@ -19,12 +25,14 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+    _controller = widget.controller ?? TextEditingController();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    if (widget.controller == null) {
+      _controller.dispose();
+    }
     super.dispose();
   }
 
