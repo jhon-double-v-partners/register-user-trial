@@ -25,6 +25,10 @@ class NewUserProvider extends StateNotifier<NewUser> {
       addresses: addresses,
     );
   }
+
+  void resetUser() {
+    state = NewUser();
+  }
 }
 
 class NewUser {

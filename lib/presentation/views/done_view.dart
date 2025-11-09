@@ -13,6 +13,11 @@ class DoneView extends ConsumerStatefulWidget {
 }
 
 class _DoneViewState extends ConsumerState<DoneView> {
+  void _onFinish() {
+    ref.read(newUserProvider.notifier).resetUser();
+    widget.onFinish?.call();
+  }
+
   @override
   Widget build(BuildContext context) {
     final userName = ref.watch(newUserProvider).name;
@@ -60,7 +65,7 @@ class _DoneViewState extends ConsumerState<DoneView> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: widget.onFinish,
+                onPressed: _onFinish,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(

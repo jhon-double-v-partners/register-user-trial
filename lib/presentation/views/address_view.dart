@@ -28,7 +28,7 @@ class _AddressViewState extends ConsumerState<AddressView> {
 
   final List<AddressItem> addresses = [AddressItem()];
 
-  void _addAddress() {
+  void _addNewAddress() {
     setState(() {
       addresses.add(AddressItem());
     });
@@ -80,7 +80,9 @@ class _AddressViewState extends ConsumerState<AddressView> {
                         children: [
                           // Lista dinámica de direcciones
                           ...List.generate(addresses.length, (index) {
+                            final address = addresses[index];
                             return FadeInUp(
+                              key: ValueKey(address.id),
                               from: 14,
                               duration: const Duration(milliseconds: 300),
                               child: Card(
@@ -96,7 +98,7 @@ class _AddressViewState extends ConsumerState<AddressView> {
                                     spacing: 8,
                                     children: [
                                       _DropDownCountryCity(
-                                        key: ValueKey('address_$index'),
+                                        key: ValueKey('dropdown_${address.id}'),
                                         onCountryChanged: (country) {
                                           addresses[index].country = country;
                                         },
@@ -148,7 +150,7 @@ class _AddressViewState extends ConsumerState<AddressView> {
 
                           // Botón agregar dirección
                           OutlinedButton.icon(
-                            onPressed: _addAddress,
+                            onPressed: _addNewAddress,
                             icon: const Icon(Icons.add_location_alt_rounded),
                             label: const Text('Agregar otra dirección'),
                             style: OutlinedButton.styleFrom(
